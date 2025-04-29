@@ -38,6 +38,66 @@ class _InputSectionState extends State<InputSection> {
     setState(() {});
   }
 
+  Widget _buildImagePreview() {
+    if (widget.pickedImage == null) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.file(widget.pickedImage!, height: 100),
+          ),
+          Positioned(
+            top: 4,
+            right: 4,
+            child: Container(
+              width: 24,
+              height: 24,
+              decoration: const BoxDecoration(
+                color: Colors.black54,
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                iconSize: 16,
+                icon: const Icon(Icons.close_rounded, color: Colors.white),
+                onPressed: () => widget.onPickImage(''),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSendButton() {
+    if (widget.textController.text.isEmpty && widget.pickedImage == null) {
+      return const SizedBox(key: ValueKey('empty'), width: 12);
+    }
+
+    if (widget.isLoading) {
+      return SizedBox(
+        width: 48,
+        height: 48,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: const CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    return IconButton(
+      key: const ValueKey('send-button'),
+      onPressed: widget.onSend,
+      icon: Icon(
+        Icons.send_rounded,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,36 +108,7 @@ class _InputSectionState extends State<InputSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.pickedImage != null)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.file(widget.pickedImage!, height: 100),
-                  ),
-                  Positioned(
-                    top: 4,
-                    right: 4,
-                    child: Container(
-                      width: 24,
-                      height: 24,
-                      decoration: const BoxDecoration(
-                        color: Colors.black54,
-                        shape: BoxShape.circle,
-                      ),
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        iconSize: 16,
-                        icon: Icon(Icons.close_rounded, color: Colors.white),
-                        onPressed: () => widget.onPickImage(''),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          _buildImagePreview(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Row(
@@ -86,8 +117,8 @@ class _InputSectionState extends State<InputSection> {
                   offset: const Offset(30, -100),
                   enabled: !widget.isLoading,
                   icon: Icon(
-                    Icons.attach_file_rounded,
-                    color: Theme.of(context).iconTheme.color,
+                    Icons.add_circle_rounded,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   itemBuilder:
                       (context) => [
@@ -130,7 +161,10 @@ class _InputSectionState extends State<InputSection> {
                       decoration: InputDecoration(
                         hintText: 'Describe your meal',
                         isDense: true,
-                        contentPadding: const EdgeInsets.all(12),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(999),
                           borderSide: BorderSide.none,
@@ -157,18 +191,7 @@ class _InputSectionState extends State<InputSection> {
                       child: child,
                     );
                   },
-                  child:
-                      widget.textController.text.isNotEmpty ||
-                              widget.pickedImage != null
-                          ? IconButton(
-                            key: const ValueKey('send-button'),
-                            onPressed: widget.isLoading ? null : widget.onSend,
-                            icon: Icon(
-                              Icons.send_rounded,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          )
-                          : const SizedBox(key: ValueKey('empty'), width: 12),
+                  child: _buildSendButton(),
                 ),
               ],
             ),

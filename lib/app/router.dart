@@ -12,7 +12,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/', builder: (context, state) => const HomePage()),
       GoRoute(
         path: '/analyzer',
-        builder: (context, state) => const AnalyzerPage(title: 'Meal Analyzer'),
+        builder: (context, state) => const AnalyzerPage(),
       ),
       GoRoute(
         path: '/health-profile',

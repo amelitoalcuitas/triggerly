@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:triggerly/app/themes/theme_provider.dart';
-import 'package:go_router/go_router.dart';
 
 class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key});
+  const CustomAppBar({super.key, this.bottom});
+
+  final PreferredSizeWidget? bottom;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeNotifier = ref.read(themeNotifierProvider.notifier);
-
     return AppBar(
       leading: IconButton(
         icon: const Icon(Icons.menu_rounded),
@@ -27,33 +25,21 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          icon: Icon(
-            Icons.person_rounded,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          onPressed: () => context.push('/health-profile'),
-        ),
-        IconButton(
-          icon: Icon(
-            themeNotifier.isDarkMode
-                ? Icons.light_mode_rounded
-                : Icons.dark_mode_rounded,
-            color: themeNotifier.isDarkMode ? Colors.yellow : Colors.teal,
-          ),
+          icon: Icon(Icons.settings_rounded),
           onPressed: () {
-            themeNotifier.toggleTheme();
+            Scaffold.of(context).openEndDrawer();
           },
         ),
       ],
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1),
-        child: Container(color: Theme.of(context).dividerColor, height: 0.25),
-      ),
+      bottom: bottom,
       surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize {
+    final bottomHeight = bottom?.preferredSize.height ?? 0;
+    return Size.fromHeight(kToolbarHeight + bottomHeight);
+  }
 }

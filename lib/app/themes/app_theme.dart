@@ -43,7 +43,6 @@ class AppTheme {
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
-    iconTheme: IconThemeData(color: lightColorScheme.primary),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         foregroundColor: lightColorScheme.onPrimary,
@@ -68,7 +67,6 @@ class AppTheme {
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
-    iconTheme: IconThemeData(color: darkColorScheme.primary),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         foregroundColor: darkColorScheme.onPrimary,

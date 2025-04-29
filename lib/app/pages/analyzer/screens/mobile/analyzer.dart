@@ -19,9 +19,7 @@ import 'package:triggerly/app/database/database_helper.dart';
 import 'package:triggerly/app/shared/widgets/empty_state_widget.dart';
 
 class AnalyzerPage extends ConsumerStatefulWidget {
-  const AnalyzerPage({super.key, required this.title});
-
-  final String title;
+  const AnalyzerPage({super.key});
 
   @override
   ConsumerState<AnalyzerPage> createState() => _AnalyzerPageState();

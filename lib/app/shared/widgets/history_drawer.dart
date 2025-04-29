@@ -16,7 +16,7 @@ class HistoryDrawer extends ConsumerWidget {
           padding: EdgeInsets.zero,
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -43,10 +43,25 @@ class HistoryDrawer extends ConsumerWidget {
                 final formattedDate =
                     '${createdAt.month}/${createdAt.day}/${createdAt.year} - ${createdAt.hour > 12 ? createdAt.hour - 12 : createdAt.hour}:${createdAt.minute.toString().padLeft(2, '0')} ${createdAt.hour >= 12 ? 'PM' : 'AM'}';
 
+                final userTriggered = meal['user_triggered'];
+
                 return ListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                   title: Text(meal['meal_name'] ?? 'Unnamed Meal'),
                   subtitle: Text(formattedDate),
+                  leading: Icon(
+                    userTriggered == null
+                        ? Icons.help_outline_rounded
+                        : userTriggered == 1
+                        ? Icons.mood_bad_rounded
+                        : Icons.mood_rounded,
+                    color:
+                        userTriggered == null
+                            ? Theme.of(context).colorScheme.onSurface
+                            : userTriggered == 1
+                            ? Theme.of(context).colorScheme.error
+                            : Theme.of(context).colorScheme.primary,
+                  ),
                   tileColor:
                       ref.watch(selectedMealProvider)?['id'] == meal['id']
                           ? Colors.grey.withAlpha(50)
