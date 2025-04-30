@@ -4,7 +4,8 @@ import 'package:path/path.dart';
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
-  static const int _version = 5; // Increment version number
+  static const int _version =
+      6; // Increment version number for is_not_food column
 
   DatabaseHelper._init();
 
@@ -96,6 +97,16 @@ class DatabaseHelper {
       try {
         await db.execute(
           'ALTER TABLE meal_history ADD COLUMN user_triggered INTEGER',
+        );
+      } catch (e) {
+        // Column might already exist, ignore error
+      }
+    }
+    if (oldVersion < 6) {
+      // Add is_not_food column for users upgrading from version 5
+      try {
+        await db.execute(
+          'ALTER TABLE meal_history ADD COLUMN is_not_food INTEGER',
         );
       } catch (e) {
         // Column might already exist, ignore error

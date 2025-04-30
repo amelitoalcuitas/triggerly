@@ -31,6 +31,7 @@ class _AnalyzerPageState extends ConsumerState<AnalyzerPage> {
   bool _isLoading = false;
   File? _pickedImage;
   bool _isImageExpanded = false;
+  final List<String> _promptHistory = [];
 
   @override
   void initState() {
@@ -73,6 +74,7 @@ class _AnalyzerPageState extends ConsumerState<AnalyzerPage> {
     setState(() => _isLoading = true);
 
     final prompt = _textController.text;
+    _promptHistory.add(prompt); // Add current prompt to history
     final gemini = Gemini.instance;
     final healthProfile = ref.read(healthProfileProvider);
     final selectedMeal = ref.read(selectedMealProvider);
@@ -111,10 +113,22 @@ class _AnalyzerPageState extends ConsumerState<AnalyzerPage> {
         }
       }
 
+      // Create prompt history context
+      String promptHistoryContext = '';
+      if (_promptHistory.length > 1) {
+        promptHistoryContext = '''
+          Previous Prompts in this Session:
+          ${_promptHistory.sublist(0, _promptHistory.length - 1).asMap().entries.map((e) => '${e.key + 1}. ${e.value}').join('\n')}
+        ''';
+      }
+
       final parts = <Part>[
-        Part.text(defaultPrompt),
         Part.text(healthProfileContext),
-        if (previousMealContext.isNotEmpty) Part.text(previousMealContext),
+        if (previousMealContext.isNotEmpty)
+          Part.text('Previous Meal Analysis: $previousMealContext'),
+        Part.text(defaultPrompt),
+        if (promptHistoryContext.isNotEmpty)
+          Part.text('Previous Prompts in this Session: $promptHistoryContext'),
         Part.text('(Start of user prompt "$prompt" End of user prompt)'),
         // Only include previous meal image if there's no new picked image
         if (previousMealImage != null && _pickedImage == null)
@@ -140,8 +154,6 @@ class _AnalyzerPageState extends ConsumerState<AnalyzerPage> {
         final jsonResponse = result?.output;
 
         if (jsonResponse != null) {
-          print('jsonResponse: $jsonResponse');
-
           _mealAnalysis = MealAnalysis.fromJson(jsonResponse);
 
           // Add the image path to the meal analysis
@@ -152,7 +164,9 @@ class _AnalyzerPageState extends ConsumerState<AnalyzerPage> {
           }
 
           // Update or save the meal analysis
-          if (_mealAnalysis != null && _mealAnalysis?.isError != true) {
+          if (_mealAnalysis != null &&
+              _mealAnalysis?.isError != true &&
+              _mealAnalysis?.isNotFood != true) {
             if (selectedMeal != null) {
               // Update existing meal analysis
               ref
@@ -223,9 +237,14 @@ class _AnalyzerPageState extends ConsumerState<AnalyzerPage> {
   Widget build(BuildContext context) {
     final selectedMeal = ref.watch(selectedMealProvider);
     final currentAnalysis =
-        selectedMeal != null ? MealAnalysis.fromMap(selectedMeal) : null;
+        selectedMeal != null
+            ? MealAnalysis.fromMap(selectedMeal)
+            : _mealAnalysis;
     final showFeedbackRow =
-        selectedMeal?['user_triggered'] == null && !_isLoading;
+        selectedMeal?['user_triggered'] == null &&
+        !_isLoading &&
+        currentAnalysis?.isNotFood != true &&
+        currentAnalysis?.isError != true;
     final userTriggered = selectedMeal?['user_triggered'];
 
     return PopScope(
@@ -278,9 +297,10 @@ class _AnalyzerPageState extends ConsumerState<AnalyzerPage> {
                             ),
 
                           if (_isLoading)
-                            const MealAnalysisSkeleton()
+                            MealAnalysisSkeleton(hasImage: _pickedImage != null)
                           else if (currentAnalysis != null &&
-                              currentAnalysis.isError != true)
+                              currentAnalysis.isError != true &&
+                              currentAnalysis.isNotFood != true)
                             MealAnalysisCard(
                               mealAnalysis: currentAnalysis,
                               isImageExpanded: _isImageExpanded,

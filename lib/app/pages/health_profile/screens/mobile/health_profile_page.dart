@@ -151,6 +151,18 @@ class _HealthProfilePageState extends ConsumerState<HealthProfilePage> {
       );
 
       ref.read(healthProfileProvider.notifier).saveHealthProfile(profile);
+
+      // Reset initial values to match current values
+      _initialAge = _ageController.text;
+      _initialHeight = _heightController.text;
+      _initialWeight = _weightController.text;
+      _initialBloodType = _bloodTypeController.text;
+      _initialMedicalConditions = _medicalConditionsController.text;
+      _initialAllergies = _allergiesController.text;
+      _initialMedications = _medicationsController.text;
+
+      setState(() {}); // Trigger rebuild to update button state
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Health profile saved successfully!')),
       );
@@ -161,6 +173,8 @@ class _HealthProfilePageState extends ConsumerState<HealthProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () => Navigator.of(context).pop(),
@@ -196,127 +210,244 @@ class _HealthProfilePageState extends ConsumerState<HealthProfilePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Row(
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: TextFormField(
-                                    controller: _ageController,
-                                    decoration: const InputDecoration(
-                                      labelText: 'Age',
-                                      hintText: 'Enter your age',
-                                    ),
-                                    keyboardType: TextInputType.number,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your age';
-                                      }
-                                      if (int.tryParse(value) == null) {
-                                        return 'Please enter a valid number';
-                                      }
-                                      return null;
-                                    },
-                                  ),
+                                Text(
+                                  'Basic Information',
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
                                 ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: TextFormField(
-                                    controller: _heightController,
-                                    decoration: const InputDecoration(
-                                      labelText: 'Height (cm)',
-                                      hintText: 'Enter height',
+                                const SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurface.withAlpha(20),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                        child: TextFormField(
+                                          controller: _ageController,
+                                          decoration: const InputDecoration(
+                                            contentPadding: EdgeInsets.all(8),
+                                            labelText: 'Age',
+                                            hintText: 'Enter your age',
+                                            border: InputBorder.none,
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please enter your age';
+                                            }
+                                            if (int.tryParse(value) == null) {
+                                              return 'Please enter a valid number';
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ),
                                     ),
-                                    keyboardType: TextInputType.number,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your height';
-                                      }
-                                      if (double.tryParse(value) == null) {
-                                        return 'Please enter a valid number';
-                                      }
-                                      return null;
-                                    },
-                                  ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurface.withAlpha(20),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                        child: TextFormField(
+                                          controller: _heightController,
+                                          decoration: const InputDecoration(
+                                            contentPadding: EdgeInsets.all(8),
+                                            labelText: 'Height (cm)',
+                                            hintText: 'Enter height',
+                                            border: InputBorder.none,
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please enter your height';
+                                            }
+                                            if (double.tryParse(value) ==
+                                                null) {
+                                              return 'Please enter a valid number';
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurface.withAlpha(20),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                        child: TextFormField(
+                                          controller: _weightController,
+                                          decoration: const InputDecoration(
+                                            contentPadding: EdgeInsets.all(8),
+                                            labelText: 'Weight (kg)',
+                                            hintText: 'Enter weight',
+                                            border: InputBorder.none,
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please enter your weight';
+                                            }
+                                            if (double.tryParse(value) ==
+                                                null) {
+                                              return 'Please enter a valid number';
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurface.withAlpha(20),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                        child: TextFormField(
+                                          controller: _bloodTypeController,
+                                          decoration: const InputDecoration(
+                                            contentPadding: EdgeInsets.all(8),
+                                            labelText: 'Blood Type',
+                                            hintText: 'e.g., A+, B-',
+                                            border: InputBorder.none,
+                                          ),
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please enter your blood type';
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                             const SizedBox(height: 16),
-                            Row(
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
+                                Text(
+                                  'Medical Information',
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 16),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface.withAlpha(20),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
                                   child: TextFormField(
-                                    controller: _weightController,
+                                    controller: _medicalConditionsController,
                                     decoration: const InputDecoration(
-                                      labelText: 'Weight (kg)',
-                                      hintText: 'Enter weight',
+                                      contentPadding: EdgeInsets.all(8),
+                                      labelText: 'Medical Conditions',
+                                      hintText:
+                                          'Enter medical conditions (comma-separated)',
+                                      border: InputBorder.none,
                                     ),
-                                    keyboardType: TextInputType.number,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your weight';
-                                      }
-                                      if (double.tryParse(value) == null) {
-                                        return 'Please enter a valid number';
-                                      }
-                                      return null;
-                                    },
+                                    maxLines: 2,
                                   ),
                                 ),
-                                const SizedBox(width: 16),
-                                Expanded(
+                                const SizedBox(height: 16),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface.withAlpha(20),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
                                   child: TextFormField(
-                                    controller: _bloodTypeController,
+                                    controller: _allergiesController,
                                     decoration: const InputDecoration(
-                                      labelText: 'Blood Type',
-                                      hintText: 'e.g., A+, B-',
+                                      contentPadding: EdgeInsets.all(8),
+                                      labelText: 'Allergies',
+                                      hintText:
+                                          'Enter allergies (comma-separated)',
+                                      border: InputBorder.none,
                                     ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter your blood type';
-                                      }
-                                      return null;
-                                    },
+                                    maxLines: 2,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface.withAlpha(20),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: TextFormField(
+                                    controller: _medicationsController,
+                                    decoration: const InputDecoration(
+                                      contentPadding: EdgeInsets.all(8),
+                                      labelText: 'Medications',
+                                      hintText:
+                                          'Enter medications (comma-separated)',
+                                      border: InputBorder.none,
+                                    ),
+                                    maxLines: 2,
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 16),
-                            TextFormField(
-                              controller: _medicalConditionsController,
-                              decoration: const InputDecoration(
-                                labelText: 'Medical Conditions',
-                                hintText:
-                                    'Enter medical conditions (comma-separated)',
+                            const SizedBox(height: 24),
+                            ElevatedButton(
+                              onPressed: _isFormDirty ? _saveProfile : null,
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
-                              maxLines: 2,
-                            ),
-                            const SizedBox(height: 16),
-                            TextFormField(
-                              controller: _allergiesController,
-                              decoration: const InputDecoration(
-                                labelText: 'Allergies',
-                                hintText: 'Enter allergies (comma-separated)',
+                              child: const Text(
+                                'Save Health Profile',
+                                style: TextStyle(fontSize: 16),
                               ),
-                              maxLines: 2,
-                            ),
-                            const SizedBox(height: 16),
-                            TextFormField(
-                              controller: _medicationsController,
-                              decoration: const InputDecoration(
-                                labelText: 'Medications',
-                                hintText: 'Enter medications (comma-separated)',
-                              ),
-                              maxLines: 2,
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: ElevatedButton(
-                      onPressed: _isFormDirty ? _saveProfile : null,
-                      child: const Text('Save Health Profile'),
                     ),
                   ),
                 ],

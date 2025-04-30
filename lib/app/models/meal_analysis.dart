@@ -11,6 +11,7 @@ class MealAnalysis {
   List<Allergen>? allergens;
   String? message;
   bool? isError;
+  bool? isNotFood;
   String? imagePath;
   bool? userTriggered;
 
@@ -23,6 +24,7 @@ class MealAnalysis {
     this.allergens,
     this.message,
     this.isError,
+    this.isNotFood,
     this.imagePath,
     this.userTriggered,
   });
@@ -36,6 +38,7 @@ class MealAnalysis {
     List<Allergen>? allergens,
     String? message,
     bool? isError,
+    bool? isNotFood,
     String? imagePath,
     bool? userTriggered,
   }) {
@@ -48,6 +51,7 @@ class MealAnalysis {
       allergens: allergens ?? this.allergens,
       message: message ?? this.message,
       isError: isError ?? this.isError,
+      isNotFood: isNotFood ?? this.isNotFood,
       imagePath: imagePath ?? this.imagePath,
       userTriggered: userTriggered ?? this.userTriggered,
     );
@@ -83,6 +87,9 @@ class MealAnalysis {
     }
     if (isError != null) {
       result.addAll({'isError': isError});
+    }
+    if (isNotFood != null) {
+      result.addAll({'is_not_food': isNotFood});
     }
     if (imagePath != null) {
       result.addAll({'imagePath': imagePath});
@@ -218,9 +225,11 @@ class MealAnalysis {
       nutritionFacts: parseNutritionFacts(map['nutrition_facts']),
       allergens: parseAllergens(map['allergens']),
       message: map['message'],
-      isError: map['is_error'] == 1,
+      isError: map['is_error'] == true || map['is_error'] == 1,
+      isNotFood: map['is_not_food'] == true || map['is_not_food'] == 1,
       imagePath: map['image_path'],
-      userTriggered: map['user_triggered'] == 1,
+      userTriggered:
+          map['user_triggered'] == true || map['user_triggered'] == 1,
     );
   }
 
@@ -231,7 +240,7 @@ class MealAnalysis {
 
   @override
   String toString() {
-    return 'MealAnalysis(mealName: $mealName, ingredients: $ingredients, refluxTriggers: $refluxTriggers, calories: $calories, nutritionFacts: $nutritionFacts, allergens: $allergens, message: $message, isError: $isError, imagePath: $imagePath, userTriggered: $userTriggered)';
+    return 'MealAnalysis(mealName: $mealName, ingredients: $ingredients, refluxTriggers: $refluxTriggers, calories: $calories, nutritionFacts: $nutritionFacts, allergens: $allergens, message: $message, isError: $isError, isNotFood: $isNotFood, imagePath: $imagePath, userTriggered: $userTriggered)';
   }
 
   @override
@@ -247,6 +256,7 @@ class MealAnalysis {
         listEquals(other.allergens, allergens) &&
         other.message == message &&
         other.isError == isError &&
+        other.isNotFood == isNotFood &&
         other.imagePath == imagePath &&
         other.userTriggered == userTriggered;
   }
@@ -261,6 +271,7 @@ class MealAnalysis {
         allergens.hashCode ^
         message.hashCode ^
         isError.hashCode ^
+        isNotFood.hashCode ^
         imagePath.hashCode ^
         userTriggered.hashCode;
   }

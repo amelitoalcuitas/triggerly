@@ -47,7 +47,11 @@ class _InputSectionState extends State<InputSection> {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.file(widget.pickedImage!, height: 100),
+            child: Image.file(
+              widget.pickedImage!,
+              height: 100,
+              fit: BoxFit.cover,
+            ),
           ),
           Positioned(
             top: 4,
@@ -108,7 +112,7 @@ class _InputSectionState extends State<InputSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildImagePreview(),
+          if (!widget.isLoading) _buildImagePreview(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Row(

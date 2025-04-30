@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:triggerly/app/pages/analyzer/screens/mobile/analyzer.dart';
+import 'package:triggerly/app/pages/analyzer/screens/mobile/analyzer_page.dart';
 import 'package:triggerly/app/pages/charts/screens/mobile/charts_page.dart';
 import 'package:triggerly/app/pages/home/screens/mobile/home_page.dart';
 import 'package:triggerly/app/pages/health_profile/screens/mobile/health_profile_page.dart';

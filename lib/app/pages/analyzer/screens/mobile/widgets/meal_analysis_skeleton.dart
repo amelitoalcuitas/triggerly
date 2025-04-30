@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class MealAnalysisSkeleton extends StatelessWidget {
-  const MealAnalysisSkeleton({super.key});
+  const MealAnalysisSkeleton({super.key, this.hasImage = false});
+
+  final bool hasImage;
 
   @override
   Widget build(BuildContext context) {
@@ -11,6 +13,17 @@ class MealAnalysisSkeleton extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (hasImage)
+            Skeleton.shade(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 16),
+                height: 150,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey,
+                ),
+              ),
+            ),
           const Text(
             'Sample Meal Name',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

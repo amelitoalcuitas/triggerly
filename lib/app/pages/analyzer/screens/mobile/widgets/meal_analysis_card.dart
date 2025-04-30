@@ -24,6 +24,9 @@ class MealAnalysisCard extends ConsumerWidget {
             ? MealAnalysis.fromMap(selectedMeal)
             : mealAnalysis;
 
+    final isError = analysis.isError ?? false;
+    final isNotFood = analysis.isNotFood ?? false;
+
     // Get the image to display
     final imageToShow =
         analysis.imagePath != null ? File(analysis.imagePath!) : null;
@@ -53,6 +56,16 @@ class MealAnalysisCard extends ConsumerWidget {
           width: double.infinity,
           child: Builder(
             builder: (context) {
+              if (isError || isNotFood) {
+                return Text(
+                  analysis.message ?? '',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                  ),
+                );
+              }
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

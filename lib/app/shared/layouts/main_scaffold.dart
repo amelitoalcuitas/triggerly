@@ -50,7 +50,11 @@ class _MainScaffoldState extends State<MainScaffold>
       ),
       drawer: const HistoryDrawer(),
       endDrawer: const SettingsDrawer(),
-      body: TabBarView(controller: _tabController, children: widget.children),
+      body: TabBarView(
+        controller: _tabController,
+        clipBehavior: Clip.none,
+        children: widget.children,
+      ),
     );
   }
 }
