@@ -125,26 +125,6 @@ class ChartsPage extends ConsumerWidget {
                 icon: Icons.bar_chart,
               ),
             ] else ...[
-              if (triggerCounts.isNotEmpty) ...[
-                const Text(
-                  'Reflux Triggers',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 300,
-                  child: PieChart(
-                    PieChartData(
-                      sections: sections,
-                      sectionsSpace: 0,
-                      centerSpaceRadius: 40,
-                      startDegreeOffset: -90,
-                    ),
-                  ),
-                ),
-              ],
-
-              const SizedBox(height: 16),
-
               if (mealTriggers.isNotEmpty) ...[
                 const Text(
                   'Meal Triggers',
@@ -165,6 +145,26 @@ class ChartsPage extends ConsumerWidget {
 
               const SizedBox(height: 16),
 
+              if (triggerCounts.isNotEmpty) ...[
+                const Text(
+                  'Reflux Triggers',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 300,
+                  child: PieChart(
+                    PieChartData(
+                      sections: sections,
+                      sectionsSpace: 0,
+                      centerSpaceRadius: 40,
+                      startDegreeOffset: -90,
+                    ),
+                  ),
+                ),
+              ],
+
+              const SizedBox(height: 16),
+
               if (dailyTriggerCounts.isNotEmpty) ...[
                 const Text(
                   'Daily Trigger Count',
@@ -173,25 +173,13 @@ class ChartsPage extends ConsumerWidget {
                 const SizedBox(height: 16),
                 SizedBox(
                   height: 300,
-                  child: BarChart(
-                    BarChartData(
-                      alignment: BarChartAlignment.spaceAround,
-                      barGroups:
-                          dailyTriggerCounts.entries.map((entry) {
-                            return BarChartGroupData(
-                              x:
-                                  DateTime.parse(
-                                    entry.key,
-                                  ).millisecondsSinceEpoch,
-                              barRods: [
-                                BarChartRodData(
-                                  toY: entry.value.toDouble(),
-                                  color: Colors.blue,
-                                  width: 16,
-                                ),
-                              ],
-                            );
-                          }).toList(),
+                  child: LineChart(
+                    LineChartData(
+                      gridData: FlGridData(
+                        show: true,
+                        drawVerticalLine: false,
+                        horizontalInterval: 1,
+                      ),
                       titlesData: FlTitlesData(
                         leftTitles: AxisTitles(
                           sideTitles: SideTitles(
@@ -230,10 +218,33 @@ class ChartsPage extends ConsumerWidget {
                           sideTitles: SideTitles(showTitles: false),
                         ),
                       ),
-                      gridData: FlGridData(
-                        drawVerticalLine: false,
-                        horizontalInterval: 1,
+                      borderData: FlBorderData(
+                        show: true,
+                        border: Border.all(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withAlpha(50),
+                        ),
                       ),
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots:
+                              dailyTriggerCounts.entries.map((entry) {
+                                return FlSpot(
+                                  DateTime.parse(
+                                    entry.key,
+                                  ).millisecondsSinceEpoch.toDouble(),
+                                  entry.value.toDouble(),
+                                );
+                              }).toList(),
+                          isCurved: true,
+                          color: Colors.blue,
+                          barWidth: 3,
+                          isStrokeCapRound: true,
+                          dotData: FlDotData(show: true),
+                          belowBarData: BarAreaData(show: false),
+                        ),
+                      ],
                     ),
                   ),
                 ),

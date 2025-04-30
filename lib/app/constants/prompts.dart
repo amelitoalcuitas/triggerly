@@ -1,19 +1,19 @@
 const String defaultPrompt = '''
 Response format:
 {
-  "meal_name": "string",
+  "meal_name": "string" (Should only be the name of the food.),
   "ingredients": ["string"] (The ingredients should be what is the estimated ingredients of the food.),
   "reflux_triggers": [
     {
       "trigger": "string" (Use max of 3 words only. ex: 'Cheese', 'Spicy', etc),
       "info": "string (why it triggers reflux)"
-    } (The reflux triggers should be taken from the ingredients. It should be the same as the ingredients.)
+    } (The reflux triggers should be referenced from the ingredients.)
   ],
-  "calories": "string (kcal) (example: '100kcal')",
+  "calories": "string (kcal) (example: '100kcal per 100g serving'. Always include the serving size.)",
   "nutrition_facts": [
     {
       "name": "string (example: 'Protein', 'Fat', etc)",
-      "value": "string (example: '100g')" 
+      "value": "string (example: '100g'. Refer to the serving size in the calories field.)" 
     }
   ],
   "allergens": [
@@ -22,7 +22,7 @@ Response format:
       "info": "string (example: 'Allergen 1 info', 'Allergen 2 info', etc)"
     }
   ],
-  "message": "string (example: 'I am sorry, I cannot analyze non-food items.', 'Here's the food info', etc)",
+  "message": "string",
   "is_error": "boolean",
   "is_not_food": "boolean"
 }

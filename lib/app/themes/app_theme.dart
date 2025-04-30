@@ -33,10 +33,19 @@ class AppTheme {
     useMaterial3: true,
     colorScheme: lightColorScheme,
     scaffoldBackgroundColor: lightColorScheme.surface,
+    dividerTheme: DividerThemeData(
+      color: lightColorScheme.onSurface.withAlpha(50),
+      thickness: 0.5,
+    ),
     appBarTheme: AppBarTheme(
       backgroundColor: lightColorScheme.surface,
       foregroundColor: lightColorScheme.onSurface,
       elevation: 0,
+      titleTextStyle: TextStyle(
+        color: lightColorScheme.primary,
+        fontSize: 24,
+        fontWeight: FontWeight.normal,
+      ),
     ),
     cardTheme: CardTheme(
       surfaceTintColor: lightColorScheme.surface,
@@ -57,10 +66,19 @@ class AppTheme {
     useMaterial3: true,
     colorScheme: darkColorScheme,
     scaffoldBackgroundColor: darkColorScheme.surface,
+    dividerTheme: DividerThemeData(
+      color: darkColorScheme.onSurface.withAlpha(50),
+      thickness: 0.5,
+    ),
     appBarTheme: AppBarTheme(
       backgroundColor: darkColorScheme.surface,
       foregroundColor: darkColorScheme.onSurface,
       elevation: 0,
+      titleTextStyle: TextStyle(
+        color: darkColorScheme.primary,
+        fontSize: 24,
+        fontWeight: FontWeight.normal,
+      ),
     ),
     cardTheme: CardTheme(
       surfaceTintColor: darkColorScheme.surface,

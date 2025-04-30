@@ -15,14 +15,7 @@ class ChatAppBar extends ConsumerWidget implements PreferredSizeWidget {
         icon: const Icon(Icons.arrow_back_rounded),
         onPressed: () => context.pop(),
       ),
-      title: Text(
-        'Meal Analyzer',
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
-          fontSize: 24,
-          fontWeight: FontWeight.normal,
-        ),
-      ),
+      title: Text('Meal Analyzer'),
       actions: [
         if (selectedMeal != null)
           IconButton(

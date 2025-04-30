@@ -179,14 +179,7 @@ class _HealthProfilePageState extends ConsumerState<HealthProfilePage> {
           icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(
-          'Health Profile',
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontSize: 24,
-            fontWeight: FontWeight.normal,
-          ),
-        ),
+        title: Text('Health Profile'),
       ),
       body:
           _isLoading

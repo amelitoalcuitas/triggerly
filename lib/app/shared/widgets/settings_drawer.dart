@@ -44,6 +44,14 @@ class SettingsDrawer extends ConsumerWidget {
                 Navigator.pop(context);
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.calculate_rounded),
+              title: const Text('BMI Calculator'),
+              onTap: () {
+                context.push('/bmi-calculator');
+                Navigator.pop(context);
+              },
+            ),
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
@@ -17,6 +18,7 @@ import 'package:triggerly/app/shared/layouts/chat_scaffold.dart';
 import 'package:triggerly/app/storage/image_storage.dart';
 import 'package:triggerly/app/database/database_helper.dart';
 import 'package:triggerly/app/shared/widgets/empty_state_widget.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class AnalyzerPage extends ConsumerStatefulWidget {
   const AnalyzerPage({super.key});
@@ -72,6 +74,30 @@ class _AnalyzerPageState extends ConsumerState<AnalyzerPage> {
 
   void _sendPrompt() async {
     setState(() => _isLoading = true);
+
+    // Check internet connectivity
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'No internet connection. Please check your connection and try again.',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
+            duration: Duration(seconds: 3),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+      return;
+    }
 
     final prompt = _textController.text;
     _promptHistory.add(prompt); // Add current prompt to history
@@ -148,7 +174,14 @@ class _AnalyzerPageState extends ConsumerState<AnalyzerPage> {
           ),
       ];
 
-      final result = await gemini.prompt(parts: parts);
+      final result = await gemini
+          .prompt(parts: parts)
+          .timeout(
+            const Duration(seconds: 30),
+            onTimeout: () {
+              throw TimeoutException('Request timed out. Please try again.');
+            },
+          );
 
       setState(() {
         final jsonResponse = result?.output;
@@ -188,12 +221,23 @@ class _AnalyzerPageState extends ConsumerState<AnalyzerPage> {
             }
           }
         } else {
-          _mealAnalysis = MealAnalysis(message: 'No response.');
+          _mealAnalysis = MealAnalysis(
+            isError: true,
+            message: 'No response received from the server. Please try again.',
+          );
         }
+      });
+    } on TimeoutException catch (e) {
+      setState(() {
+        _mealAnalysis = MealAnalysis(isError: true, message: e.message);
       });
     } catch (e) {
       setState(() {
-        _mealAnalysis = MealAnalysis(message: 'An error occurred: $e');
+        _mealAnalysis = MealAnalysis(
+          isError: true,
+          message:
+              'An error occurred while processing your request. Please try again.',
+        );
       });
     } finally {
       setState(() => _isLoading = false);

@@ -5,8 +5,7 @@ import 'package:triggerly/app/app.dart';
 
 const apiKey = 'AIzaSyCBIbbab05BF-zE2PvEVgBQrEqQvtNKHnM';
 
-void main() {
+void main() async {
   Gemini.init(apiKey: apiKey);
-
   runApp(ProviderScope(child: const MyApp()));
 }
