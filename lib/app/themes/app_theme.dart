@@ -7,12 +7,12 @@ class AppTheme {
   static final ColorScheme lightColorScheme = ColorScheme.light(
     primary: primaryColor,
     secondary: primaryColor.withValues(alpha: 0.7),
-    surface: Colors.white,
-    error: Colors.red[700]!,
-    onPrimary: Colors.white,
-    onSecondary: Colors.white,
-    onSurface: Colors.grey[900]!,
-    onError: Colors.white,
+    surface: const Color(0xFFEDFDFD),
+    error: const Color(0xFFED1C24),
+    onPrimary: const Color(0xFFEDFDFD),
+    onSecondary: const Color(0xFFEDFDFD),
+    onSurface: const Color(0xFF071E22),
+    onError: const Color(0xFFEDFDFD),
     brightness: Brightness.light,
   );
 
@@ -20,12 +20,12 @@ class AppTheme {
   static final ColorScheme darkColorScheme = ColorScheme.dark(
     primary: primaryColor,
     secondary: primaryColor.withValues(alpha: 0.7),
-    surface: const Color(0xFF121212),
-    error: Colors.red[300]!,
-    onPrimary: Colors.white,
-    onSecondary: Colors.white,
-    onSurface: Colors.white,
-    onError: Colors.black,
+    surface: const Color(0xFF071E22),
+    error: const Color(0xFFFF4D4D),
+    onPrimary: const Color(0xFFEDFDFD),
+    onSecondary: const Color(0xFFEDFDFD),
+    onSurface: const Color(0xFFEDFDFD),
+    onError: const Color(0xFF071E22),
     brightness: Brightness.dark,
   );
 
@@ -59,7 +59,9 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
-    textTheme: Typography.material2021().black,
+    textTheme: TextTheme(
+      bodyLarge: TextStyle(color: lightColorScheme.onSurface),
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -92,6 +94,8 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
-    textTheme: Typography.material2021().white,
+    textTheme: TextTheme(
+      bodyLarge: TextStyle(color: darkColorScheme.onSurface),
+    ),
   );
 }
